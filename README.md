@@ -1,6 +1,4 @@
-# TiwiT map blocks bundle
-
-## Simple map
+# Simple Map block
 
 Allow you to add a simple map in your content. You can add one marker with a popup and you have a few option to style everything.
 
