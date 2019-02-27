@@ -1,7 +1,7 @@
 /*
  * Display map on front for simple map block
  */
-const tiwitSimpleMap = document.querySelectorAll('.wp-block-tiwit-map-blocks-bundle-simple-map');
+const tiwitSimpleMap = document.querySelectorAll('.wp-block-arnaudban-simple-map');
 
 Array.prototype.forEach.call( tiwitSimpleMap, function(mapWrapper) {
 	let mapData = mapWrapper.dataset.map

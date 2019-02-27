@@ -1,9 +1,8 @@
 <?php
 /**
- * Plugin Name: TiwiT map blocks bundle
- * Plugin URI: https://tiwit.io
- * Description: Add maps block
- * Author: TiwiT, ArnaudBan
+ * Plugin Name: Simple map block
+ * Description: Add simple map block
+ * Author: ArnaudBan
  * Author URI: https://arnaudban.me
  * Version: 1.0.0
  * License: GPL2+
