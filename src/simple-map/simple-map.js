@@ -38,7 +38,9 @@ registerBlockType( 'arnaudban/simple-map', {
 		__( 'location' ),
 	],
 	supports: {
-		html: false
+		html: false,
+		align: true,
+		alignWide: true
 	},
 	attributes: {
 		address: {
