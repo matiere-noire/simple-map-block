@@ -79,7 +79,7 @@ class SimpleMapEdit extends Component {
 				center: [ 47.2161494, -1.5335951 ],
 				zoom: zoom
 			});
-			L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png').addTo( map );
+			L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png').addTo( map );
 
 
 			this.setState( {

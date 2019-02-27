@@ -20,7 +20,7 @@ Array.prototype.forEach.call( ABSimpleMap, function(mapWrapper) {
 				scrollWheelZoom: ! ( mapData.align && mapData.align === 'full')
 			}).setView(latLongObj, zoom )
 
-			L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png').addTo(mymap)
+			L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png').addTo(mymap)
 			const marker = L.marker( latLongObj ).addTo( mymap )
 
 			// Add popup
