@@ -26,7 +26,7 @@ const {
 } = wp.components
 
 
-class TiwitSimpleMap extends Component {
+class SimpleMapEdit extends Component {
 
 	constructor() {
 		super( ...arguments );
@@ -73,13 +73,11 @@ class TiwitSimpleMap extends Component {
 		let { map } = this.state
 		const { lat, lon, popup, zoom } = this.props.attributes
 
-		const realZoom = zoom ? zoom : 13
-
 		if( ! map ){
 
 			map = L.map( this.mapRef.current, {
 				center: [ 47.2161494, -1.5335951 ],
-				zoom: realZoom
+				zoom: zoom
 			});
 			L.tileLayer('http://{s}.tile.openstreetmap.se/hydda/full/{z}/{x}/{y}.png').addTo( map );
 
@@ -104,7 +102,7 @@ class TiwitSimpleMap extends Component {
 
 			// Cet the center of the map and the new Marker
 			map.setView( latLongObj )
-			map.setZoom( realZoom )
+			map.setZoom( zoom )
 
 			// Add marker
 			const marker =L.marker( latLongObj ).addTo( map );
@@ -217,4 +215,4 @@ class TiwitSimpleMap extends Component {
 	}
 }
 
-export default TiwitSimpleMap;
+export default SimpleMapEdit;

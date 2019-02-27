@@ -5,7 +5,7 @@
  * Simple block, renders and saves the same content without any interactivity.
  */
 
-import TiwitSimpleMap from './TiwitSimpleMap';
+import SimpleMapEdit from './SimpleMapEdit';
 
 const { __ } = wp.i18n; // Import __() from wp.i18n
 
@@ -56,7 +56,8 @@ registerBlockType( 'arnaudban/simple-map', {
 			type: 'string'
 		},
 		zoom:{
-			type: 'int'
+			type: 'int',
+			default: 13
 		}
 	},
 
@@ -68,7 +69,7 @@ registerBlockType( 'arnaudban/simple-map', {
 	 *
 	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
 	 */
-	edit: TiwitSimpleMap,
+	edit: SimpleMapEdit,
 
 	/**
 	 * The save function defines the way in which the different attributes should be combined
@@ -78,9 +79,18 @@ registerBlockType( 'arnaudban/simple-map', {
 	 *
 	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
 	 */
-	save: function( props ) {
+	save: function( { attributes, className } ) {
+
+		const dataMap = JSON.stringify( {
+			lat:attributes.lat,
+			lon:attributes.lon,
+			popup :attributes.popup,
+			align :  attributes.align,
+			zoom :  attributes.zoom,
+		} )
+
 		return (
-			<div className={ props.className } data-map={ JSON.stringify( props.attributes)} />
+			<div className={ className } data-map={ dataMap} />
 		);
 	},
 } );
