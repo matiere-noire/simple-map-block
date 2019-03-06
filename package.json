@@ -10,5 +10,10 @@
   "dependencies": {
     "cgb-scripts": "^1.15.0",
     "leaflet": "^1.3.4"
+  },
+  "prettier" : {
+	"semi": false,
+	"singleQuote": true,
+	"printWidth": 160
   }
 }

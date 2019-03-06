@@ -5,15 +5,11 @@
  * Simple block, renders and saves the same content without any interactivity.
  */
 
-import SimpleMapEdit from './SimpleMapEdit';
+import SimpleMapEdit from './SimpleMapEdit'
 
-const { __ } = wp.i18n; // Import __() from wp.i18n
+const { __ } = wp.i18n // Import __() from wp.i18n
 
-const {
-	registerBlockType,
-} = wp.blocks
-
-
+const { registerBlockType } = wp.blocks
 
 /**
  * Register: aa Gutenberg Block.
@@ -28,15 +24,12 @@ const {
  * @return {?WPBlock}          The block, if it has been successfully
  *                             registered; otherwise `undefined`.
  */
-registerBlockType( 'arnaudban/simple-map', {
+registerBlockType('arnaudban/simple-map', {
 	// Block name. Block names must be string that contains a namespace prefix. Example: my-plugin/my-custom-block.
-	title: __( 'Simple map' ), // Block title.
+	title: __('Simple map'), // Block title.
 	icon: 'location-alt', // Block icon from Dashicons → https://developer.wordpress.org/resource/dashicons/.
 	category: 'common', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
-	keywords: [
-		__( 'map' ),
-		__( 'location' ),
-	],
+	keywords: [__('map'), __('location')],
 	supports: {
 		html: false,
 		align: true,
@@ -44,18 +37,18 @@ registerBlockType( 'arnaudban/simple-map', {
 	},
 	attributes: {
 		address: {
-			type: 'string',
-		},
-		lat: {
-			type: 'string',
-		},
-		lon: {
-			type: 'string',
-		},
-		popup:{
 			type: 'string'
 		},
-		zoom:{
+		lat: {
+			type: 'string'
+		},
+		lon: {
+			type: 'string'
+		},
+		popup: {
+			type: 'string'
+		},
+		zoom: {
 			type: 'int',
 			default: 13
 		}
@@ -79,18 +72,15 @@ registerBlockType( 'arnaudban/simple-map', {
 	 *
 	 * @link https://wordpress.org/gutenberg/handbook/block-api/block-edit-save/
 	 */
-	save: function( { attributes, className } ) {
+	save: function({ attributes, className }) {
+		const dataMap = JSON.stringify({
+			lat: attributes.lat,
+			lon: attributes.lon,
+			popup: attributes.popup,
+			align: attributes.align,
+			zoom: attributes.zoom
+		})
 
-		const dataMap = JSON.stringify( {
-			lat:attributes.lat,
-			lon:attributes.lon,
-			popup :attributes.popup,
-			align :  attributes.align,
-			zoom :  attributes.zoom,
-		} )
-
-		return (
-			<div className={ className } data-map={ dataMap} />
-		);
-	},
-} );
+		return <div className={className} data-map={dataMap} />
+	}
+})

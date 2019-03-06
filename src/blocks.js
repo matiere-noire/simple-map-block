@@ -9,4 +9,4 @@
  * Webpack is compiling as the input file.
  */
 
-import './simple-map/simple-map.js';
+import './simple-map/simple-map.js'
