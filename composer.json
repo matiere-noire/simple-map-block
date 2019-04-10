@@ -1,5 +1,5 @@
 {
-    "name": "arnaudban/simple-map-block",
+    "name": "matiere-noire/simple-map-block",
     "description": "WordPress plugin to a map block",
     "type": "wordpress-plugin",
     "license": "MIT",
@@ -7,7 +7,11 @@
         {
             "name": "ArnaudBan",
             "email": "arnaud@banvillet.fr"
-        }
+        },
+		{
+			"name": "Matière Noire",
+            "email": "developer@matierenoire.io"
+		}
     ],
     "require": {
         "php": "^7.2"
