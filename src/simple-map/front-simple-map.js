@@ -3,6 +3,8 @@
  */
 const ABSimpleMap = document.querySelectorAll('.wp-block-arnaudban-simple-map')
 
+mapboxgl.accessToken = simpleMapData.mapboxKey
+
 Array.prototype.forEach.call(ABSimpleMap, function(mapWrapper) {
 	let mapData = mapWrapper.dataset.map
 
@@ -12,20 +14,33 @@ Array.prototype.forEach.call(ABSimpleMap, function(mapWrapper) {
 		if (mapData.lat && mapData.lon) {
 			mapWrapper.style.height = '70vh'
 
-			const zoom = mapData.zoom ? mapData.zoom : 13
+			let zoom = mapData.zoom ? mapData.zoom : 13
+			let longLatObj = [parseFloat(mapData.lon), parseFloat(mapData.lat)]
+			let map = new mapboxgl.Map({
+				container: mapWrapper,
+				center: longLatObj,
+				zoom: zoom,
+				style: 'mapbox://styles/mapbox/streets-v10'
+			})
 
-			const latLongObj = [parseFloat(mapData.lat), parseFloat(mapData.lon)]
-			const mymap = L.map(mapWrapper, {
-				scrollWheelZoom: !(mapData.align && mapData.align === 'full')
-			}).setView(latLongObj, zoom)
+			//disable zoom
+			if (mapData.align && mapData.align === 'full') {
+				map.scrollZoom.disable()
+			}
 
-			L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png').addTo(mymap)
-			const marker = L.marker(latLongObj).addTo(mymap)
+			// Create marker
+			var el = document.createElement('div')
+			el.className = 'marker'
+
+			const newMarker = new mapboxgl.Marker(el).setLngLat(longLatObj)
 
 			// Add popup
 			if (mapData.popup) {
-				marker.bindPopup(mapData.popup)
+				newMarker.setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(mapData.popup))
 			}
+
+			//Add marker to Map
+			newMarker.addTo(map)
 		}
 	}
 })

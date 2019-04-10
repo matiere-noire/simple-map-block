@@ -5,8 +5,7 @@
  * Simple block, renders and saves the same content without any interactivity.
  */
 
-//  Import CSS.
-import L from 'leaflet'
+import mapboxgl from '../../node_modules/mapbox-gl'
 
 const { Component, Fragment } = wp.element
 
@@ -15,6 +14,8 @@ const { __ } = wp.i18n // Import __() from wp.i18n
 const { InspectorControls } = wp.editor
 
 const { PanelBody, TextControl, TextareaControl, RangeControl, Button, Notice } = wp.components
+
+mapboxgl.accessToken = simpleMapData.mapboxKey
 
 class SimpleMapEdit extends Component {
 	constructor() {
@@ -29,7 +30,8 @@ class SimpleMapEdit extends Component {
 		this.state = {
 			map: null,
 			isWaitingForNominatim: false,
-			nominatimReturnEmpty: false
+			nominatimReturnEmpty: false,
+			marker: null
 		}
 	}
 
@@ -50,42 +52,51 @@ class SimpleMapEdit extends Component {
 	}
 
 	displayMap() {
-		let { map } = this.state
+		let { map, marker } = this.state
 		const { lat, lon, popup, zoom } = this.props.attributes
 
 		if (!map) {
-			map = L.map(this.mapRef.current, {
-				center: [47.2161494, -1.5335951],
-				zoom: zoom
+			map = new mapboxgl.Map({
+				container: this.mapRef.current,
+				center: [-1.5335951, 47.2161494],
+				zoom: zoom,
+				style: 'mapbox://styles/mapbox/streets-v10'
 			})
-			L.tileLayer('https://tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png').addTo(map)
 
 			this.setState({
 				map: map
 			})
 		} else {
-			// delete every Marker on the map
-			map.eachLayer(function(layer) {
-				if (layer instanceof L.Marker) {
-					layer.removeFrom(map)
-				}
+			//delete every Marker on the map
+			marker.remove()
+			this.setState({
+				marker: null
 			})
 		}
 
 		if (lat && lon) {
-			const latLongObj = [parseFloat(lat), parseFloat(lon)]
+			const longLatObj = [parseFloat(lon), parseFloat(lat)]
 
 			// Cet the center of the map and the new Marker
-			map.setView(latLongObj)
+			map.setCenter(longLatObj)
 			map.setZoom(zoom)
 
-			// Add marker
-			const marker = L.marker(latLongObj).addTo(map)
+			// Create marker
+			var el = document.createElement('div')
+			el.className = 'marker'
+
+			const newMarker = new mapboxgl.Marker(el).setLngLat(longLatObj)
 
 			// Add popup
 			if (popup) {
-				marker.bindPopup(popup).openPopup()
+				newMarker.setPopup(new mapboxgl.Popup({ offset: 25 }).setHTML(popup))
 			}
+
+			//Add marker to Map
+			newMarker.addTo(map)
+			this.setState({
+				marker: newMarker
+			})
 		}
 	}
 

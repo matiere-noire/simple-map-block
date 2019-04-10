@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-add_action( 'enqueue_block_assets', 'tiwit_map_blocks_bundle_cgb_block_assets' );
+add_action( 'enqueue_block_assets', 'simple_map_block_assets' );
 
 /**
  * Enqueue Gutenberg block assets for both frontend + backend.
@@ -22,62 +22,46 @@ add_action( 'enqueue_block_assets', 'tiwit_map_blocks_bundle_cgb_block_assets' )
  *
  * @since 1.0.0
  */
-function tiwit_map_blocks_bundle_cgb_block_assets() {
+function simple_map_block_assets() {
 
 	wp_enqueue_style(
-		'tiwit-leaflet-css',
-		'https://unpkg.com/leaflet@1.3.4/dist/leaflet.css',
+		'mapbox-css',
+		'https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css',
 		array(),
-		'1.3.4'
+		'0.53.0'
+	);
+	wp_enqueue_style(
+		'simple-map-common-css',
+		plugins_url( '/src/common.css', dirname( __FILE__ ) ),
+		null,
+		null 
 	);
 
 	if( ! is_admin() ){
 
-		wp_enqueue_script( 'tiwit-leaflet-js',
-			'https://unpkg.com/leaflet@1.3.4/dist/leaflet.js',
+		wp_enqueue_script( 'mapbox-js',
+			'https://api.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js',
 			array(),
-			'1.3.4',
+			'0.53.0',
 			true
 		);
 
-		wp_enqueue_script( 'tiwit-front-simple-map',
+		wp_enqueue_script( 'front-simple-map',
 			plugins_url( '/src/simple-map/front-simple-map.js', dirname( __FILE__ ) ),
-			array( 'tiwit-leaflet-js' ),
+			array( 'mapbox-js' ),
 			'1.0',
 			true
 		);
+		
+		wp_localize_script( 'front-simple-map', 'simpleMapData', [
+			'mapboxKey' => defined( 'MAPBOX_KEY' ) ? MAPBOX_KEY : null,
+		] );
 	}
 
 }
 
 
-add_filter('script_loader_tag', 'tiwit_map_js_add_attributes', 10, 2);
-
-function tiwit_map_js_add_attributes( $tag, $handle ) {
-
-	if( $handle == 'tiwit-leaflet-js'){
-
-		$tag = str_replace(' src=', ' integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA==" crossorigin="" src=', $tag);
-	}
-
-	return $tag;
-}
-
-
-add_filter( 'style_loader_tag', 'tiwit_map_css_add_attributes', 10, 2);
-
-function tiwit_map_css_add_attributes( $tag, $handle ){
-
-	if( $handle == 'tiwit-leaflet-css'){
-
-		$tag = str_replace(' href=', ' integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA==" crossorigin="" href=', $tag);
-	}
-
-	return $tag;
-}
-
-
-add_action( 'enqueue_block_editor_assets', 'tiwit_map_blocks_bundle_cgb_editor_assets' );
+add_action( 'enqueue_block_editor_assets', 'simple_map_editor_block_assets' );
 
 /**
  * Enqueue Gutenberg block assets for backend editor.
@@ -88,14 +72,18 @@ add_action( 'enqueue_block_editor_assets', 'tiwit_map_blocks_bundle_cgb_editor_a
  *
  * @since 1.0.0
  */
-function tiwit_map_blocks_bundle_cgb_editor_assets() {
+function simple_map_editor_block_assets() {
 	// Scripts.
 	wp_enqueue_script(
-		'tiwit_map_blocks_bundle-cgb-block-js',
+		'simple-map-editor-js',
 		plugins_url( '/dist/blocks.build.js', dirname( __FILE__ ) ),
 		array( 'wp-blocks', 'wp-i18n', 'wp-element' ),
 		'1.0'
 	);
+	
+	wp_localize_script( 'simple-map-editor-js', 'simpleMapData', [
+		'mapboxKey' => defined( 'MAPBOX_KEY' ) ? MAPBOX_KEY : null,
+	] );
 
 }
 
