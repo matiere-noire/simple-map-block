@@ -20,7 +20,7 @@ Array.prototype.forEach.call(ABSimpleMap, function(mapWrapper) {
 				container: mapWrapper,
 				center: longLatObj,
 				zoom: zoom,
-				style: 'mapbox://styles/mapbox/streets-v10'
+				style: mapData.style
 			})
 
 			//disable zoom
