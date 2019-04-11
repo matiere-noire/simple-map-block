@@ -21,10 +21,7 @@ class SimpleMapEdit extends Component {
 	constructor() {
 		super(...arguments)
 
-		this.changeUserAddress = this.changeUserAddress.bind(this)
 		this.getLatLongFromAddress = this.getLatLongFromAddress.bind(this)
-		this.changePopupContent = this.changePopupContent.bind(this)
-		this.changeMapStyle = this.changeMapStyle.bind(this)
 
 		this.mapRef = React.createRef()
 
@@ -56,19 +53,18 @@ class SimpleMapEdit extends Component {
 	displayMap() {
 		let { map, marker } = this.state
 		const { lat, lon, popup, zoom, style } = this.props.attributes
-		const newStyle = style ? style : 'mapbox://styles/mapbox/streets-v10'
 		if (!map) {
 			map = new mapboxgl.Map({
 				container: this.mapRef.current,
 				center: [-1.5335951, 47.2161494],
 				zoom: zoom,
-				style: newStyle
+				style
 			})
 
 			this.setState({
 				map: map
 			})
-		} else {
+		} else if (marker) {
 			//delete every Marker on the map
 			marker.remove()
 			this.setState({
@@ -77,7 +73,7 @@ class SimpleMapEdit extends Component {
 		}
 
 		if (style) {
-			map.setStyle(newStyle)
+			map.setStyle(style)
 		}
 
 		if (lat && lon) {
@@ -104,24 +100,6 @@ class SimpleMapEdit extends Component {
 				marker: newMarker
 			})
 		}
-	}
-
-	changeUserAddress(address) {
-		this.props.setAttributes({
-			address: address
-		})
-	}
-
-	changePopupContent(content) {
-		this.props.setAttributes({
-			popup: content
-		})
-	}
-
-	changeMapStyle(style) {
-		this.props.setAttributes({
-			style: style
-		})
 	}
 
 	getLatLongFromAddress() {
@@ -166,7 +144,7 @@ class SimpleMapEdit extends Component {
 			<Fragment>
 				<InspectorControls>
 					<PanelBody title={__('Map Settings')}>
-						<TextControl label={__('Address')} value={attributes.address} onChange={this.changeUserAddress} />
+						<TextControl label={__('Address')} value={attributes.address} onChange={address => setAttributes({ address })} />
 						<div className="blocks-base-control">
 							<Button onClick={this.getLatLongFromAddress} isLarge isBusy={isWaitingForNominatim}>
 								{attributes.lat ? __('Change marker position') : __('Add marker on map')}
@@ -175,7 +153,9 @@ class SimpleMapEdit extends Component {
 								<Notice status="error" isDismissible={false} content={__('Error while searching the address, please verify and try again')} />
 							)}
 						</div>
-						{attributes.lat && <TextareaControl label={__('Popup content')} value={attributes.popup} onChange={this.changePopupContent} />}
+						{attributes.lat && (
+							<TextareaControl label={__('Popup content')} value={attributes.popup} onChange={popup => setAttributes({ popup })} />
+						)}
 						<RangeControl
 							label={__('Zoom')}
 							value={attributes.zoom ? attributes.zoom : 13}
@@ -183,7 +163,7 @@ class SimpleMapEdit extends Component {
 							min={1}
 							max={20}
 						/>
-						<TextControl label={__('Map style')} value={attributes.style} onChange={this.changeMapStyle} />
+						<TextControl label={__('Map style')} value={attributes.style} onChange={style => setAttributes({ style })} />
 					</PanelBody>
 				</InspectorControls>
 				<div className={className} ref={this.mapRef} style={{ height: '500px' }} />
