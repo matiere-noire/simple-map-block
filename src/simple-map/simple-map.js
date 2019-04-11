@@ -49,7 +49,8 @@ registerBlockType('arnaudban/simple-map', {
 			type: 'string'
 		},
 		style: {
-			type: 'string'
+			type: 'string',
+			default: 'mapbox://styles/mapbox/outdoors-v10'
 		},
 		zoom: {
 			type: 'int',
