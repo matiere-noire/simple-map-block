@@ -48,6 +48,9 @@ registerBlockType('arnaudban/simple-map', {
 		popup: {
 			type: 'string'
 		},
+		style: {
+			type: 'string'
+		},
 		zoom: {
 			type: 'int',
 			default: 13
@@ -78,6 +81,7 @@ registerBlockType('arnaudban/simple-map', {
 			lon: attributes.lon,
 			popup: attributes.popup,
 			align: attributes.align,
+			style: attributes.style,
 			zoom: attributes.zoom
 		})
 

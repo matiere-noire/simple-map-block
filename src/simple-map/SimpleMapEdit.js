@@ -24,6 +24,7 @@ class SimpleMapEdit extends Component {
 		this.changeUserAddress = this.changeUserAddress.bind(this)
 		this.getLatLongFromAddress = this.getLatLongFromAddress.bind(this)
 		this.changePopupContent = this.changePopupContent.bind(this)
+		this.changeMapStyle = this.changeMapStyle.bind(this)
 
 		this.mapRef = React.createRef()
 
@@ -45,6 +46,7 @@ class SimpleMapEdit extends Component {
 			(this.props.attributes.lat !== prevProps.attributes.lat ||
 				this.props.attributes.lon !== prevProps.attributes.lon ||
 				this.props.attributes.popup !== prevProps.attributes.popup ||
+				this.props.attributes.style !== prevProps.attributes.style ||
 				this.props.attributes.zoom !== prevProps.attributes.zoom)
 		) {
 			this.displayMap()
@@ -53,14 +55,14 @@ class SimpleMapEdit extends Component {
 
 	displayMap() {
 		let { map, marker } = this.state
-		const { lat, lon, popup, zoom } = this.props.attributes
-
+		const { lat, lon, popup, zoom, style } = this.props.attributes
+		const newStyle = style ? style : 'mapbox://styles/mapbox/streets-v10'
 		if (!map) {
 			map = new mapboxgl.Map({
 				container: this.mapRef.current,
 				center: [-1.5335951, 47.2161494],
 				zoom: zoom,
-				style: 'mapbox://styles/mapbox/streets-v10'
+				style: newStyle
 			})
 
 			this.setState({
@@ -72,6 +74,10 @@ class SimpleMapEdit extends Component {
 			this.setState({
 				marker: null
 			})
+		}
+
+		if (style) {
+			map.setStyle(newStyle)
 		}
 
 		if (lat && lon) {
@@ -109,6 +115,13 @@ class SimpleMapEdit extends Component {
 	changePopupContent(content) {
 		this.props.setAttributes({
 			popup: content
+		})
+	}
+
+	changeMapStyle(style) {
+		console.log('changeMapStyle', style)
+		this.props.setAttributes({
+			style: style
 		})
 	}
 
@@ -171,6 +184,7 @@ class SimpleMapEdit extends Component {
 							min={1}
 							max={20}
 						/>
+						<TextControl label={__('Map style')} value={attributes.style} onChange={this.changeMapStyle} />
 					</PanelBody>
 				</InspectorControls>
 				<div className={className} ref={this.mapRef} style={{ height: '500px' }} />
