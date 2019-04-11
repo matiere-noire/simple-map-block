@@ -5,7 +5,7 @@
  * Simple block, renders and saves the same content without any interactivity.
  */
 
-import mapboxgl from '../../node_modules/mapbox-gl'
+import mapboxgl from 'mapbox-gl'
 
 const { Component, Fragment } = wp.element
 
