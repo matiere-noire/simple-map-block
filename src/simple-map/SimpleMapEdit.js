@@ -119,7 +119,6 @@ class SimpleMapEdit extends Component {
 	}
 
 	changeMapStyle(style) {
-		console.log('changeMapStyle', style)
 		this.props.setAttributes({
 			style: style
 		})
